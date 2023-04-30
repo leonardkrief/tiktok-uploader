@@ -38,8 +38,8 @@ user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 	iframe = "//iframe"
 	
 	upload_video = "//input[@type='file']"
-	upload_in_progress = "//*[.='Cancel']"
-	upload_confirmation = "//video" 
+	upload_in_progress = "//*[@data-pct]"
+	loading_indicator = "//div[contains(@class, 'tiktok-ui-loading-container')]"
 	process_confirmation = "//img[@draggable='false']"
 
 	description = "//div[@contenteditable='true']"
