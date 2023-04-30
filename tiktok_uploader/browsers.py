@@ -19,8 +19,12 @@ from selenium.webdriver.edge.service import Service as EdgeService
 
 from selenium import webdriver
 
-from tiktok_uploader import config
+import toml
+from os.path import abspath, join, dirname
 
+src_dir = abspath(dirname(__file__))
+config_path = join(src_dir, 'config.toml')
+config = toml.load(config_path)
 
 def get_browser(name: str = 'chrome', options=None, *args, **kwargs) -> webdriver:
     """

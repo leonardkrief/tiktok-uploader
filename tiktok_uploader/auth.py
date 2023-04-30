@@ -7,8 +7,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from tiktok_uploader import config
 from tiktok_uploader.browsers import get_browser
+
+import toml
+from os.path import abspath, join, dirname
+
+src_dir = abspath(dirname(__file__))
+config_path = join(src_dir, 'config.toml')
+config = toml.load(config_path)
 
 class AuthBackend:
     """

@@ -19,8 +19,13 @@ from selenium.webdriver.common.keys import Keys
 
 from tiktok_uploader.browsers import get_browser
 from tiktok_uploader.auth import AuthBackend
-from tiktok_uploader import config
 
+import toml
+from os.path import abspath, join, dirname
+
+src_dir = abspath(dirname(__file__))
+config_path = join(src_dir, 'config.toml')
+config = toml.load(config_path)
 
 def upload_video(filename=None, description='', username='',
                  password='', cookies='', *args, **kwargs):
@@ -253,21 +258,24 @@ def _set_video(driver, path: str = '', num_retries: int = 3, **kwargs) -> None:
                 By.XPATH, config['selectors']['upload']['upload_video']
             )
             upload_box.send_keys(path)
-
             # waits for the video to upload
             upload_progress = EC.presence_of_element_located(
                 (By.XPATH, config['selectors']['upload']['upload_in_progress'])
                 )
-
             WebDriverWait(driver, config['explicit_wait']).until(upload_progress)
             WebDriverWait(driver, config['explicit_wait']).until_not(upload_progress)
-
+            
             # waits for the upload to completely settle
             loading_indicator = EC.presence_of_element_located(
                 (By.XPATH, config['selectors']['upload']['loading_indicator'])
                 )
-
-            WebDriverWait(driver, config['explicit_wait']).until(loading_indicator)
+            # On fast browsers, the loading indicator may not appear, so instead of waiting
+            # for it to appear, I think the best solution is just to wait for 2 seconds here.
+            # If the browser is slow, the indicator will appear and we will wait for it to
+            # disappear, else we will just wait for 2 seconds.
+            # I wonder if there is a cleaner way to do this.
+            # WebDriverWait(driver, config['explicit_wait']).until(loading_indicator)
+            time.sleep(1)
             WebDriverWait(driver, config['explicit_wait']).until_not(loading_indicator)
 
             # wait until a non-draggable image is found
