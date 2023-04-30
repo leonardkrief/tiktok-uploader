@@ -7,6 +7,8 @@
 > A **Selenium**-based automated **TikTok** video uploader
 
 # Table of Contents
+- [⬆️ TikTok Uploader](#️-tiktok-uploader)
+- [Table of Contents](#table-of-contents)
 - [Installation](#installation)
   - [MacOS, Windows and Linux](#macos-windows-and-linux)
     - [Downloading from PyPI (Recommended)](#downloading-from-pypi-recommended)
@@ -21,9 +23,9 @@
   - [🚲 Custom WebDriver Driver Options](#-custom-webdriver-driver-options)
   - [🤯 Headless Browsers](#-headless-browsers)
   - [🔨 Initial Setup](#-initial-setup)
-- [♻️ Examples](#-examples)
+- [♻ Examples](#-examples)
 - [📝 Notes](#-notes)
-- [Accounts made with](#accounts-made-using-tiktok-uploader)
+- [Accounts made using `tiktok-uploader`](#accounts-made-using-tiktok-uploader)
 # Installation
 
 A prequisite to using this program is the installation of a [Selenium-compatable](https://www.selenium.dev/documentation/webdriver/getting_started/install_drivers/) web browser. [Google Chrome](https://www.google.com/chrome/) is recommended.
@@ -42,15 +44,18 @@ pip install tiktok-uploader
 
 ### Building from source
 
-Installing from source allows greater flexability to modify the module's code to extend default behavior. 
-
-First, `clone` and move into the repository. Next, install `hatch`, the build tool used for this project [^1]. Then, `build` the projet. Finally, `install` the project with the `-e` or editable flag.  
+Installing from source allows greater flexability to modify the module's code to extend default behavior.
+To install it, clone the repository and install the requirements
 ```bash
 git clone https://github.com/wkaisertexas/tiktok-uploader.git
 cd tiktok-uploader
-pip install hatch
-hatch build
-pip install -e . 
+pip install -r requirements.txt
+```
+
+If you want to install it as a library in your Python environment, run the following command from the root of the repository
+```bash
+python -m build --wheel
+pip install dist/tiktok_uploader-0.1.2-py3-none-any.whl
 ```
 
 # Usage
