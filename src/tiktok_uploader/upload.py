@@ -246,14 +246,15 @@ def _set_video(driver, path: str = '', num_retries: int = 3, **kwargs) -> None:
         The path to the video to upload
     num_retries : number of retries (can occassionally fail)
     """
-    # uploades the element
+    # uploads the element
     for _ in range(num_retries):
         try:
             upload_box = driver.find_element(
                 By.XPATH, config['selectors']['upload']['upload_video']
             )
             upload_box.send_keys(path)
-            # waits for the upload progress bar to disappear
+
+            # waits for the video to upload
             upload_progress = EC.presence_of_element_located(
                 (By.XPATH, config['selectors']['upload']['upload_in_progress'])
                 )
@@ -261,14 +262,13 @@ def _set_video(driver, path: str = '', num_retries: int = 3, **kwargs) -> None:
             WebDriverWait(driver, config['explicit_wait']).until(upload_progress)
             WebDriverWait(driver, config['explicit_wait']).until_not(upload_progress)
 
-            # waits for the video to upload
-            upload_confirmation = EC.presence_of_element_located(
-                (By.XPATH, config['selectors']['upload']['upload_confirmation'])
+            # waits for the upload to completely settle
+            loading_indicator = EC.presence_of_element_located(
+                (By.XPATH, config['selectors']['upload']['loading_indicator'])
                 )
 
-            # NOTE (IMPORTANT): implicit wait as video should already be uploaded if not failed
-            # An exception throw here means the video failed to upload an a retry is needed
-            WebDriverWait(driver, config['implicit_wait']).until(upload_confirmation)
+            WebDriverWait(driver, config['explicit_wait']).until(loading_indicator)
+            WebDriverWait(driver, config['explicit_wait']).until_not(loading_indicator)
 
             # wait until a non-draggable image is found
             process_confirmation = EC.presence_of_element_located(
