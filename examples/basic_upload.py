@@ -2,7 +2,7 @@
 
 import urllib.request
 
-from tiktok_uploader.upload import upload_video
+from tiktok_uploader import upload_video
 
 URL = "https://raw.githubusercontent.com/wkaisertexas/wkaisertexas.github.io/main/upload.mp4"
 FILENAME = "upload.mp4"
