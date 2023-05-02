@@ -16,6 +16,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
 
 from tiktok_uploader.browsers import get_browser
 from tiktok_uploader.auth import AuthBackend
@@ -131,6 +132,7 @@ def complete_upload_form(driver, path: str, description: str, *args, **kwargs) -
         The path to the video to upload
     """
     _go_to_upload(driver)
+    _check_and_close_cookie_popup(driver)
     _set_video(driver, path=path, **kwargs)
     _set_interactivity(driver, **kwargs)
     _set_description(driver, description)
@@ -157,7 +159,24 @@ def _go_to_upload(driver) -> None:
     # waits for the iframe to load
     root_selector = EC.presence_of_element_located((By.ID, 'root'))
     WebDriverWait(driver, config['explicit_wait']).until(root_selector)
+    
+    try:
+        elem = driver.find_element(
+                By.XPATH, config['selectors']['upload']['upload_video']
+            )
+        ActionChains(driver).move_to_element(elem).click(elem).perform()
+    except Exception as e:
+        pass
 
+def _check_and_close_cookie_popup(driver):
+    try:
+        cookie_close_button_selector = config['selectors']['upload']['cookie_close_button']
+
+        close_button = driver.find_element(By.XPATH, cookie_close_button_selector)
+
+        ActionChains(driver).move_to_element(close_button).click(close_button).perform()
+    except NoSuchElementException:
+        pass
 
 def _set_description(driver, description: str) -> None:
     """
